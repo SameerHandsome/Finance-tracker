@@ -32,3 +32,10 @@ Umair:
 Make progress bar of task(progress.py)
 Ashfaq:
 Make task_list.py
+
+## Pull request Links
+https://github.com/SameerHandsome/Finance-tracker/pull/5
+https://github.com/SameerHandsome/Finance-tracker/pull/4
+https://github.com/SameerHandsome/Finance-tracker/pull/3
+https://github.com/SameerHandsome/Finance-tracker/pull/2
+https://github.com/SameerHandsome/Finance-tracker/pull/1
