@@ -3,8 +3,8 @@ from tkinter import messagebox
 import sqlite3
 
 class ProgressApp(tk.Tk):
-    def _init_(self):
-        super()._init_()
+    def __init__(self):
+        super().__init__()
         self.title("Task Manager - Progress")
         self.geometry("400x300")
         
@@ -43,6 +43,6 @@ class ProgressApp(tk.Tk):
         self.conn.close()
         super().destroy()
 
-if __name__ == "_main_":
+if __name__ == "__main__":
     app = ProgressApp()
     app.mainloop()
