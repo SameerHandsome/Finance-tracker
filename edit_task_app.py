@@ -4,8 +4,8 @@ import sqlite3
 from datetime import datetime
 
 class EditTaskApp(tk.Tk):
-    def _init_(self):
-        super()._init_()
+    def __init__(self):
+        super().__init__()
         self.title("Task Manager - Edit Task")
         self.geometry("400x350")
         
