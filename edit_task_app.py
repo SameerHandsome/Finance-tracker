@@ -107,6 +107,6 @@ class EditTaskApp(tk.Tk):
         self.conn.close()
         super().destroy()
 
-if __name__ == "_main_":
+if __name__ == "__main__":
     app = EditTaskApp()
     app.mainloop()
