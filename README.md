@@ -13,9 +13,22 @@ Finance Tracker is designed to streamline the process of monitoring personal fin
 Frontend- Tkinter
 Backend-Python and sqlite
 
-[App Running](images_tk/run.png)
-![Main Interface](images_tk/tk1.png)
-![Add Task](images_tk/tk2.png)
-![Task List](images_tk/tk3.png)
-![View task](images_tk/tk4.png)
-![Task Updated](images_tk/tk5.png)
+[App Running](images_tk/run.PNG)
+![Main Interface](images_tk/tk1.PNG)
+![Add Task](images_tk/tk2.PNG)
+![Task List](images_tk/tk3.PNG)
+![View task](images_tk/tk4.PNG)
+![Task Updated](images_tk/tk5.PNG)
+
+## Team Contributions
+
+Sameer(Leader):
+Make home interface(home.py)
+Asma:
+Edit Task (edit_task.py)
+Ayesha:
+Add Task(add_task.py)
+Umair:
+Make progress bar of task(progress.py)
+Ashfaq:
+Make task_list.py
