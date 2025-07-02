@@ -13,3 +13,9 @@ Finance Tracker is designed to streamline the process of monitoring personal fin
 Frontend- Tkinter
 Backend-Python and sqlite
 
+[App Running](images_tk/run.png)
+![Main Interface](images_tk/tk1.png)
+![Add Task](images_tk/tk2.png)
+![Task List](images_tk/tk3.png)
+![View task](images_tk/tk4.png)
+![Task Updated](images_tk/tk5.png)
