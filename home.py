@@ -4,8 +4,8 @@ import sqlite3
 import subprocess
 
 class HomeApp(tk.Tk):
-    def _init_(self):
-        super()._init_()
+    def __init__(self):
+        super().__init__()
         self.title("Task Manager - Home")
         self.geometry("400x300")
         
