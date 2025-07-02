@@ -72,6 +72,6 @@ class HomeApp(tk.Tk):
         except FileNotFoundError:
             messagebox.showerror("Error", "Edit Task app not found!")
 
-if _name_ == "_main_":
+if __name__ == "_main_":
     app = HomeApp()
     app.mainloop()
