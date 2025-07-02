@@ -5,8 +5,8 @@ import sqlite3
 from datetime import datetime
 
 class AddTaskApp(tk.Tk):
-    def _init_(self):
-        super()._init_()
+    def __init__(self):
+        super().__init__()
         self.title("Task Manager - Add Task")
         self.geometry("400x300")
         
@@ -65,6 +65,6 @@ class AddTaskApp(tk.Tk):
         self.conn.close()
         super().destroy()
 
-if __name__ == "_main_":
+if __name__ == "__main__":
     app = AddTaskApp()
     app.mainloop()
