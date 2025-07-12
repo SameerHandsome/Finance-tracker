@@ -13,7 +13,7 @@ class HomeApp(tk.Tk):
         self.conn = sqlite3.connect("tasks.db")
         self.cursor = self.conn.cursor()
         self.cursor.execute("""
-            CREATE TABLE IF NOT EXISTS tasks (
+            CREATE TABLE IF NOT EXISTS tasks (  
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 title TEXT,
                 priority TEXT,
