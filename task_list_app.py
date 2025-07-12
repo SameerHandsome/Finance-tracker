@@ -1,4 +1,3 @@
-
 import tkinter as tk
 from tkinter import ttk, messagebox
 import sqlite3
@@ -9,47 +8,52 @@ class TaskListApp(tk.Tk):
         self.title("Task Manager - Task List")
         self.geometry("600x400")
         
-        # Initialize database
+        # Connect to database
         self.conn = sqlite3.connect("tasks.db")
         self.cursor = self.conn.cursor()
         
-        # UI
-        tk.Label(self, text="Task List", font=("Arial", 14, "bold")).pack(pady=10)
+        # Title Label
+        title_label = tk.Label(self, text="Task List", font=("Arial", 14, "bold"))
+        title_label.pack(pady=10)
         
-        self.tree = ttk.Treeview(self, columns=("Title", "Priority", "Due Date", "Status"), show="headings")
-        self.tree.heading("Title", text="Title")
-        self.tree.heading("Priority", text="Priority")
-        self.tree.heading("Due Date", text="Due Date")
-        self.tree.heading("Status", text="Status")
-        self.tree.column("Title", width=200)
-        self.tree.column("Priority", width=100)
-        self.tree.column("Due Date", width=100)
-        self.tree.column("Status", width=100)
-        self.tree.pack(pady=10, fill="both", expand=True)
+        # Treeview setup
+        self.task_view = ttk.Treeview(self, columns=("Title", "Priority", "Due Date", "Status"), show="headings")
+        headings = [("Title", 200), ("Priority", 100), ("Due Date", 100), ("Status", 100)]
+        for col_name, col_width in headings:
+            self.task_view.heading(col_name, text=col_name)
+            self.task_view.column(col_name, width=col_width)
+
+        self.task_view.pack(pady=10, fill="both", expand=True)
         
-        # Buttons
+        # Button Frame
         button_frame = tk.Frame(self)
         button_frame.pack(pady=10)
-        tk.Button(button_frame, text="Refresh List", width=15, command=self.refresh_tasks).pack(side="left", padx=5)
-        tk.Button(button_frame, text="Close", width=15, command=self.destroy).pack(side="left", padx=5)
         
-        self.refresh_tasks()
+        refresh_btn = tk.Button(button_frame, text="Refresh List", width=15, command=self.load_tasks)
+        refresh_btn.pack(side="left", padx=5)
+
+        close_btn = tk.Button(button_frame, text="Close", width=15, command=self.close_app)
+        close_btn.pack(side="left", padx=5)
+        
+        self.load_tasks()
     
-    def refresh_tasks(self):
-        for item in self.tree.get_children():
-            self.tree.delete(item)
+    def load_tasks(self):
+        # Clear existing entries
+        for item in self.task_view.get_children():
+            self.task_view.delete(item)
         
         self.cursor.execute("SELECT title, priority, due_date, status FROM tasks")
         tasks = self.cursor.fetchall()
+        
         if not tasks:
             messagebox.showinfo("Info", "No tasks found.")
         else:
             for task in tasks:
-                self.tree.insert("", tk.END, values=task)
+                self.task_view.insert("", tk.END, values=task)
     
-    def destroy(self):
+    def close_app(self):
         self.conn.close()
-        super().destroy()
+        self.destroy()
 
 if __name__ == "__main__":
     app = TaskListApp()
