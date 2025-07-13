@@ -36,11 +36,12 @@ class HomeApp(tk.Tk):
         button_frame = tk.Frame(self)
         button_frame.pack(pady=20)
 
-        # Buttons with consistent width
-        tk.Button(button_frame, text="Add Task", width=12, command=self.open_add_task).pack(side="left", padx=5)
-        tk.Button(button_frame, text="View Tasks", width=12, command=self.open_task_list).pack(side="left", padx=5)
-        tk.Button(button_frame, text="Progress", width=12, command=self.open_progress).pack(side="left", padx=5)
-        tk.Button(button_frame, text="Edit Task", width=12, command=self.open_edit_task).pack(side="left", padx=5)
+        # Buttons with blue background and white text
+        button_style = {"width": 12, "bg": "blue", "fg": "white"}
+        tk.Button(button_frame, text="Add Task", command=self.open_add_task, **button_style).pack(side="left", padx=5)
+        tk.Button(button_frame, text="View Tasks", command=self.open_task_list, **button_style).pack(side="left", padx=5)
+        tk.Button(button_frame, text="Progress", command=self.open_progress, **button_style).pack(side="left", padx=5)
+        tk.Button(button_frame, text="Edit Task", command=self.open_edit_task, **button_style).pack(side="left", padx=5)
 
     def update_summary(self):
         """Update the task summary label."""
