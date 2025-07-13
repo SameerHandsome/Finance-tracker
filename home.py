@@ -1,3 +1,4 @@
+# Contribution by Ahmad Khawar: Verified home screen GUI structure
 import tkinter as tk
 from tkinter import messagebox
 import sqlite3

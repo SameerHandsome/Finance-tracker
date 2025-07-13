@@ -31,6 +31,7 @@ Umair:
 Make progress bar of task(progress.py)
 Ashfaq:
 Make task_list.py
+## Contributor: Ahmad Khawar (Inter-Group Collaboration)
 
 ## Pull request Links
 https://github.com/SameerHandsome/Finance-tracker/pull/5
