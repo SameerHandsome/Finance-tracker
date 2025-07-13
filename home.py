@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import ttk, messagebox
 import sqlite3
 import subprocess
 
@@ -7,13 +7,14 @@ class HomeApp(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("Task Manager - Home")
-        self.geometry("420x320")  # Slightly increased window size for better spacing
+        self.geometry("500x400")
+        self.configure(bg="#f5f7fa")  # Light background color
 
-        # Initialize database
+        # Database setup
         self.conn = sqlite3.connect("tasks.db")
         self.cursor = self.conn.cursor()
         self.cursor.execute("""
-            CREATE TABLE IF NOT EXISTS tasks (  
+            CREATE TABLE IF NOT EXISTS tasks (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 title TEXT,
                 priority TEXT,
@@ -23,24 +24,46 @@ class HomeApp(tk.Tk):
         """)
         self.conn.commit()
 
-        # UI elements
-        tk.Label(self, text="Task Management System", font=("Arial", 16, "bold")).pack(pady=(20, 5))
-        tk.Label(self, text="Welcome! Manage your tasks.", font=("Arial", 10)).pack(pady=(0, 10))
+        # Header Section
+        header = tk.Frame(self, bg="#f5f7fa")
+        header.pack(pady=(20, 10))
 
-        # Task summary section
-        self.summary_label = tk.Label(self, text="Loading task summary...", font=("Arial", 10))
-        self.summary_label.pack(pady=10)
+        tk.Label(header, text="📋 Task Management System", 
+                 font=("Segoe UI", 18, "bold"), bg="#f5f7fa", fg="#2c3e50").pack()
+        tk.Label(header, text="Welcome! Manage your tasks effectively.",
+                 font=("Segoe UI", 11), bg="#f5f7fa", fg="#34495e").pack()
+
+        # Summary Section
+        summary_frame = tk.Frame(self, bg="#f5f7fa", pady=10)
+        summary_frame.pack()
+
+        self.summary_label = tk.Label(summary_frame, 
+                                      text="Loading task summary...",
+                                      font=("Segoe UI", 10), 
+                                      bg="#f5f7fa", fg="#2c3e50", justify="left")
+        self.summary_label.pack()
         self.update_summary()
 
-        # Navigation buttons
-        button_frame = tk.Frame(self)
-        button_frame.pack(pady=20)
+        # Separator
+        ttk.Separator(self, orient="horizontal").pack(fill='x', pady=10)
 
-        # Buttons with consistent width
-        tk.Button(button_frame, text="Add Task", width=12, command=self.open_add_task).pack(side="left", padx=5)
-        tk.Button(button_frame, text="View Tasks", width=12, command=self.open_task_list).pack(side="left", padx=5)
-        tk.Button(button_frame, text="Progress", width=12, command=self.open_progress).pack(side="left", padx=5)
-        tk.Button(button_frame, text="Edit Task", width=12, command=self.open_edit_task).pack(side="left", padx=5)
+        # Navigation Buttons
+        button_frame = tk.Frame(self, bg="#f5f7fa")
+        button_frame.pack(pady=10)
+
+        # Use ttk for better styling
+        style = ttk.Style()
+        style.configure("TButton", font=("Segoe UI", 10), padding=6)
+
+        # Modern buttons with uniform size
+        ttk.Button(button_frame, text="➕ Add Task", width=20, command=self.open_add_task).grid(row=0, column=0, padx=10, pady=10)
+        ttk.Button(button_frame, text="📂 View Tasks", width=20, command=self.open_task_list).grid(row=0, column=1, padx=10, pady=10)
+        ttk.Button(button_frame, text="📊 Progress", width=20, command=self.open_progress).grid(row=1, column=0, padx=10, pady=10)
+        ttk.Button(button_frame, text="✏️ Edit Task", width=20, command=self.open_edit_task).grid(row=1, column=1, padx=10, pady=10)
+
+        # Footer
+        footer = tk.Label(self, text="© 2025 Task Manager", font=("Segoe UI", 9), bg="#f5f7fa", fg="#95a5a6")
+        footer.pack(side="bottom", pady=10)
 
     def update_summary(self):
         """Update the task summary label."""
@@ -50,7 +73,7 @@ class HomeApp(tk.Tk):
         self.cursor.execute("SELECT COUNT(*) FROM tasks WHERE status = 'Completed'")
         completed_tasks = self.cursor.fetchone()[0]
 
-        summary = f"Total Tasks: {total_tasks}\nCompleted Tasks: {completed_tasks}"
+        summary = f"📌 Total Tasks: {total_tasks}\n✅ Completed Tasks: {completed_tasks}"
         self.summary_label.config(text=summary)
 
     def open_add_task(self):

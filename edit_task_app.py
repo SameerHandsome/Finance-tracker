@@ -7,48 +7,70 @@ class EditTaskApp(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("Task Manager - Edit Task")
-        self.geometry("400x350")
+        self.geometry("480x420")
+        self.configure(bg="#f5f7fa")
 
         # Initialize database
         self.conn = sqlite3.connect("tasks.db")
         self.cursor = self.conn.cursor()
 
-        # UI
-        tk.Label(self, text="Edit Task", font=("Arial", 14, "bold")).pack(pady=10)
+        # Header
+        tk.Label(self, text="✏️ Edit Task", font=("Segoe UI", 16, "bold"),
+                 bg="#f5f7fa", fg="#2c3e50").pack(pady=20)
 
-        # Task selection
-        tk.Label(self, text="Select Task:", font=("Arial", 10)).pack(pady=5)
+        # Task Selection
+        tk.Label(self, text="Select Task:", font=("Segoe UI", 10),
+                 bg="#f5f7fa").pack()
         self.task_var = tk.StringVar()
-        self.task_dropdown = ttk.Combobox(self, textvariable=self.task_var, width=30, state="readonly")
+        self.task_dropdown = ttk.Combobox(self, textvariable=self.task_var, width=45, state="readonly")
         self.task_dropdown.pack(pady=5)
         self.task_dropdown.bind("<<ComboboxSelected>>", self.load_task_details)
 
-        # Input fields
-        form_frame = tk.Frame(self)
+        # Form Frame
+        form_frame = tk.Frame(self, bg="#f5f7fa")
         form_frame.pack(pady=10)
 
-        tk.Label(form_frame, text="Title:", font=("Arial", 10)).grid(row=0, column=0, sticky="e", padx=5, pady=5)
-        self.title_entry = tk.Entry(form_frame, width=30)
-        self.title_entry.grid(row=0, column=1, padx=5, pady=5)
+        # Title
+        tk.Label(form_frame, text="Title:", font=("Segoe UI", 10),
+                 bg="#f5f7fa", anchor="w", width=18).grid(row=0, column=0, padx=10, pady=8, sticky="e")
+        self.title_entry = ttk.Entry(form_frame, width=30)
+        self.title_entry.grid(row=0, column=1, padx=5, pady=8)
 
-        tk.Label(form_frame, text="Priority:", font=("Arial", 10)).grid(row=1, column=0, sticky="e", padx=5, pady=5)
+        # Priority
+        tk.Label(form_frame, text="Priority:", font=("Segoe UI", 10),
+                 bg="#f5f7fa", anchor="w", width=18).grid(row=1, column=0, padx=10, pady=8, sticky="e")
         self.priority_var = tk.StringVar(value="Low")
-        tk.OptionMenu(form_frame, self.priority_var, "Low", "Medium", "High").grid(row=1, column=1, sticky="w", padx=5, pady=5)
+        self.priority_menu = ttk.Combobox(form_frame, textvariable=self.priority_var, state="readonly", width=28)
+        self.priority_menu['values'] = ("Low", "Medium", "High")
+        self.priority_menu.grid(row=1, column=1, padx=5, pady=8)
 
-        tk.Label(form_frame, text="Due Date (YYYY-MM-DD):", font=("Arial", 10)).grid(row=2, column=0, sticky="e", padx=5, pady=5)
-        self.date_entry = tk.Entry(form_frame, width=30)
-        self.date_entry.grid(row=2, column=1, padx=5, pady=5)
+        # Due Date
+        tk.Label(form_frame, text="Due Date (YYYY-MM-DD):", font=("Segoe UI", 10),
+                 bg="#f5f7fa", anchor="w", width=18).grid(row=2, column=0, padx=10, pady=8, sticky="e")
+        self.date_entry = ttk.Entry(form_frame, width=30)
+        self.date_entry.grid(row=2, column=1, padx=5, pady=8)
 
-        tk.Label(form_frame, text="Status:", font=("Arial", 10)).grid(row=3, column=0, sticky="e", padx=5, pady=5)
+        # Status
+        tk.Label(form_frame, text="Status:", font=("Segoe UI", 10),
+                 bg="#f5f7fa", anchor="w", width=18).grid(row=3, column=0, padx=10, pady=8, sticky="e")
         self.status_var = tk.StringVar(value="Pending")
-        tk.OptionMenu(form_frame, self.status_var, "Pending", "Completed").grid(row=3, column=1, sticky="w", padx=5, pady=5)
+        self.status_menu = ttk.Combobox(form_frame, textvariable=self.status_var, state="readonly", width=28)
+        self.status_menu['values'] = ("Pending", "Completed")
+        self.status_menu.grid(row=3, column=1, padx=5, pady=8)
 
         # Buttons
-        button_frame = tk.Frame(self)
-        button_frame.pack(pady=10)
-        tk.Button(button_frame, text="Update Task", width=15, command=self.update_task).pack(side="left", padx=5)
-        tk.Button(button_frame, text="Close", width=15, command=self.destroy).pack(side="left", padx=5)
-        
+        button_frame = tk.Frame(self, bg="#f5f7fa")
+        button_frame.pack(pady=20)
+
+        style = ttk.Style()
+        style.configure("Accent.TButton", font=("Segoe UI", 10, "bold"))
+
+        ttk.Button(button_frame, text="🔄 Update Task", style="Accent.TButton", width=18,
+                   command=self.update_task).pack(side="left", padx=10)
+        ttk.Button(button_frame, text="❌ Close", width=18,
+                   command=self.close_window).pack(side="left", padx=10)
+
+        # Load tasks into dropdown
         self.load_task_options()
 
     def load_task_options(self):
@@ -89,24 +111,29 @@ class EditTaskApp(tk.Tk):
         status = self.status_var.get()
 
         if not title or not due_date:
-            messagebox.showerror("Error", "Title and Due Date are required!")
+            messagebox.showerror("Validation Error", "Title and Due Date are required.")
             return
 
         try:
             datetime.strptime(due_date, "%Y-%m-%d")
+        except ValueError:
+            messagebox.showerror("Invalid Date Format", "Please enter the date in YYYY-MM-DD format.")
+            return
+
+        try:
             self.cursor.execute(
                 "UPDATE tasks SET title = ?, priority = ?, due_date = ?, status = ? WHERE id = ?",
                 (title, priority, due_date, status, task_id)
             )
             self.conn.commit()
-            messagebox.showinfo("Success", "Task updated successfully!")
+            messagebox.showinfo("Success", "Task updated successfully.")
             self.load_task_options()
-        except ValueError:
-            messagebox.showerror("Error", "Invalid date format! Use YYYY-MM-DD.")
+        except Exception as e:
+            messagebox.showerror("Database Error", f"An error occurred:\n{e}")
 
-    def destroy(self):
+    def close_window(self):
         self.conn.close()
-        super().destroy()
+        self.destroy()
 
 if __name__ == "__main__":
     app = EditTaskApp()
