@@ -64,8 +64,12 @@ class AddTaskApp(tk.Tk):
             messagebox.showerror("Validation Error", "Title and Due Date are required.")
             return
 
+        # ✅ New validation block to check if due date is in the past
         try:
-            datetime.strptime(due_date, "%Y-%m-%d")
+            due = datetime.strptime(due_date, "%Y-%m-%d")
+            if due < datetime.now():
+                messagebox.showerror("Invalid Date", "Due date cannot be in the past.")
+                return
         except ValueError:
             messagebox.showerror("Invalid Date Format", "Please enter the date in YYYY-MM-DD format.")
             return
